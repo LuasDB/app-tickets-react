@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Opcional: Transición suave para el cambio de tema */
+body {
+  @apply transition-colors duration-200;
+}
