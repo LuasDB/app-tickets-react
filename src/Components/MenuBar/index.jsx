@@ -1,89 +1,58 @@
-import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
+import { useNavigate } from "react-router-dom";
+import Card from "../Card";
+import Col from "./../Col"
+import { CiLogout } from "react-icons/ci";
+import { useAuth } from './../../Context/AuthContext'
+import { useEffect } from "react";
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
-}));
+export default function MenuBar() {
+  const { user, logout} = useAuth()
+  const navigate = useNavigate()
+  useEffect(()=>{
+    if(!user){
+    navigate('/login')
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
+    }
+  },[])
+  const handleLogout = ()=>{
+    logout()
+    navigate('/login')
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  width: '100%',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
-      },
-    },
-  },
-}));
+  }
 
-export default function SearchAppBar() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
+    
+<Card className="p-2">
+      <div className="flex items-center justify-between">
+        {/* Logo */}
+        <div className="flex items-center gap-2">
+          <img
+            src="/logo.svg"
+            alt="Logo de la empresa"
+            className="w-5 h-5 object-contain"
+          />
+          <span className="text-xl font-semibold text-gray-800 hidden sm:block">
+            Mi Empresa
+          </span>
+        </div>
+
+        {/* Usuario + Logout */}
+        <div className="flex items-center gap-4">
+          <div className="text-right hidden sm:block">
+            <div className="text-sm font-medium text-gray-800">{user.nombre}</div>
+            <div className="text-xs text-gray-500">{user.email}</div>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="p-2 rounded-full hover:bg-gray-100 transition"
+            title="Cerrar sesión"
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
-            MUI
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-        </Toolbar>
-      </AppBar>
-    </Box>
+            <CiLogout  className="w-5 h-5 text-gray-700" />
+          </button>
+        </div>
+      </div>
+    </Card>
+    
+    
   );
 }

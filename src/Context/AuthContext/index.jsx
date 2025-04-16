@@ -1,4 +1,5 @@
 import { createContext,useState,useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
 
 import { jwtDecode } from 'jwt-decode'
@@ -11,6 +12,7 @@ const AuthProvider = ({children})=>{
 
     const [user, setUser] = useState(null)
     const [loading,setLoading] = useState(false)
+   
 
     useEffect(()=>{
         setLoading(true)
@@ -33,7 +35,6 @@ const AuthProvider = ({children})=>{
                 const token = data.token
                 localStorage.setItem('token-tickets',token)
                 const decoded = jwtDecode(token)
-                console.log('Logueado',decoded)
                 setUser(decoded)
             }else{
                 
@@ -54,6 +55,8 @@ const AuthProvider = ({children})=>{
     const logout= ()=>{
         localStorage.removeItem('token-tickets')
         setUser(null)
+        
+
     }
 
     return (

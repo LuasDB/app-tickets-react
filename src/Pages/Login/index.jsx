@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Alert } from "@mui/material";
 import { useAuth } from "../../Context/AuthContext";
 
@@ -8,6 +9,8 @@ export default function Login(){
   const [error,setError] = useState(false)
   const [messageError, setMessageError] = useState("");
   const [isAuthenticated,setIsAuthenticated] = useState(false)
+
+  const navigator = useNavigate()
 
   const { login, user } = useAuth()
 
@@ -20,9 +23,8 @@ export default function Login(){
     try {
     await login(loginForm.email,loginForm.password)
     setIsAuthenticated(true)
+    navigator('/gestion')
     
-
-
       
     } catch (error) {
       console.error(error)
