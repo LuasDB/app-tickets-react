@@ -7,23 +7,25 @@ import './../index.css'
 import AuthProvider from '../Context/AuthContext';
 import Private from '../Components/Private';
 import AdminLayout from '../Pages/AdminLayout';
+import Sidebar from '../Components/Sidebar';
 
 function App() {
 
   return (
     <>
-    <div className='flex flex-row-reverse p-1 fixed right-3 top-12'>
+    <div className='p-1 fixed z-[9999] right-3 top-5'>
       <ThemeToggle />
     </div>
     <AuthProvider>
       <BrowserRouter>
       <Routes>
+        <Route path='*' element={<Login />} />
         <Route path='/login' element={<Login />}/>
-        <Route path='/s' element={<AdminLayout />}/>
+        <Route path='/sidebar' element={<Sidebar />}/>
 
         <Route path='/reset-password' element={<RestartPassword />}/>
         <Route path='/EmailResetPasswordForm' element={<EmailResetPasswordForm />}/>
-        <Route path='/gestion' element={<Private><AdminLayout /></Private>} />
+        <Route path='/gestion/*' element={<Private><AdminLayout /></Private>} />
 
       </Routes>
     </BrowserRouter>

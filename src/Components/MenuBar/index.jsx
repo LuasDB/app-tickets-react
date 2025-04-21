@@ -4,6 +4,7 @@ import Col from "./../Col"
 import { CiLogout } from "react-icons/ci";
 import { useAuth } from './../../Context/AuthContext'
 import { useEffect } from "react";
+import  logo  from './../../assets/logo_omegasys.png'
 
 export default function MenuBar() {
   const { user, logout} = useAuth()
@@ -22,24 +23,24 @@ export default function MenuBar() {
 
   return (
     
-<Card className="p-2">
-      <div className="flex items-center justify-between">
+<Card className="p-2 w-[100%]">
+      <div className="flex items-center justify-between w-full">
         {/* Logo */}
         <div className="flex items-center gap-2">
           <img
-            src="/logo.svg"
+            src={logo}
             alt="Logo de la empresa"
-            className="w-5 h-5 object-contain"
+            className="w-20 h-5 object-contain"
           />
-          <span className="text-xl font-semibold text-gray-800 hidden sm:block">
-            Mi Empresa
+          <span className="text-xl font-semibold text-gray-800 dark:text-white hidden sm:block">
+            Soporte OMEGASYS
           </span>
         </div>
 
         {/* Usuario + Logout */}
         <div className="flex items-center gap-4">
           <div className="text-right hidden sm:block">
-            <div className="text-sm font-medium text-gray-800">{user.nombre}</div>
+            <div className="text-sm font-medium text-gray-800 dark:text-white">{user.nombre}</div>
             <div className="text-xs text-gray-500">{user.email}</div>
           </div>
           <button

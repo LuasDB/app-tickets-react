@@ -3,9 +3,6 @@ import axios from 'axios'
 const apiClient = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
     timeout:10000,
-    headers:{
-        'Content-Type':'application/json'
-    }
 })
 
 apiClient.interceptors.response.use(
@@ -18,4 +15,15 @@ apiClient.interceptors.response.use(
     }
 )
 
+apiClient.interceptors.request.use(
+    config =>{
+        if(!(config.data instanceof FormData)){
+            config.headers['Content-Type']='application/json'
+        }
+        return config
+    },
+    error =>{
+        return Promise.reject(error)
+    }
+)
 export default apiClient
