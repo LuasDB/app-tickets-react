@@ -41,7 +41,7 @@ export default function ModalViewEditClient({item,modo,onClose,onUpdate}){
   
     setErrors(newErrors)
   
-    // Si alguno es true, hay error
+    
     const hasError = Object.values(newErrors).some((err) => err)
     if (hasError) {
      setError(true)

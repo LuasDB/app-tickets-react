@@ -48,7 +48,7 @@ export default function Login(){
       <div className="max-w-md w-full p-6 space-y-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
         <div>
           <h2 className="text-center text-3xl font-bold text-gray-900 dark:text-white">
-            Soporte Técnico Omega Systems
+            Soporte Técnico Omegasys
           </h2>
         </div>
         <form className="mt-8 space-y-6" >

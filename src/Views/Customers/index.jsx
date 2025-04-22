@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import Card from '@/Components/Card'
 import Table from '@/Components/Table'
 import ModalViewEditClient from '@/Components/ModalViewEditClient'
+import ModalFormClient from '@/Components/ModalFormClient'
 
 export default function Customers(){
 
@@ -16,6 +17,8 @@ export default function Customers(){
         {key:'serviceTimeTotal',label:'Horas a cuenta',render:(row)=>row.serviceTime?.total ?? 0 }
 
     ]
+
+    const [newClient,setNewClient] = useState(false)
 
     const [itemSelected,setItemSelected] = useState(null)
     const [modo,setModo] = useState(null)
@@ -34,6 +37,21 @@ export default function Customers(){
         setCustomers(newArray)
         console.log('Dame el nuevo costumewrs',newArray)
 
+    }
+    const addClient = async(id)=>{
+        try {
+            const { data } = await customersService.getById(id)
+            if(data.success){
+                setCustomers(prev => [...prev,data.data])
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
+
+    const handleNewClient = ()=>{
+        setNewClient(true)
     }
 
     
@@ -61,6 +79,7 @@ export default function Customers(){
             <Card className='flex flex-col'>
                 <Button 
                 className='max-w-[280px] text-white bg-indigo-600 hover:bg-indigo-700'
+                onClick={handleNewClient}
                 >Nuevo cliente</Button>
                 <Table 
                 data={customers} 
@@ -75,6 +94,9 @@ export default function Customers(){
                         onClose={()=> setItemSelected(null)}
                         onUpdate={updateClient}
                     />
+                )}
+                {newClient && (
+                    <ModalFormClient openForm={newClient} onClose={()=>setNewClient(false) } onAdd={addClient}/>
                 )}
 
 
