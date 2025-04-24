@@ -21,9 +21,19 @@ export default function Login(){
       return
     }
     try {
-    await login(loginForm.email,loginForm.password)
-    setIsAuthenticated(true)
-    navigator('/gestion')
+    const isLogin = await login(loginForm.email,loginForm.password)
+
+    if(isLogin.success){
+      if(isLogin.userRole === 'admin'){
+        setIsAuthenticated(true)
+        navigator('/gestion')
+      }else{
+        setIsAuthenticated(true)
+        navigator('/app')
+      }
+    }
+
+   
     
       
     } catch (error) {

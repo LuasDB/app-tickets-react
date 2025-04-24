@@ -36,6 +36,7 @@ const AuthProvider = ({children})=>{
                 localStorage.setItem('token-tickets',token)
                 const decoded = jwtDecode(token)
                 setUser(decoded)
+                return { success:true, userRole: decoded.role}
             }else{
                 
                 setUser(null)

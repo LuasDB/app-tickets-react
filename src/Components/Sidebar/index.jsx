@@ -2,11 +2,12 @@ import Card from "../Card";
 import { routes } from "../../routes";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useBasePath } from "@/Hooks/useBasePath";
 
 
 export default function Sidebar({...props}){
     
-    const { baseRoute } = props
+    
     const [tittle,setTittle] = useState('Bienvenido')
     const [selected,setSelected] = useState(null)
 
@@ -15,6 +16,8 @@ export default function Sidebar({...props}){
         setTittle(item.name)
         setSelected(index)
     }
+
+    const basePath = useBasePath()
 
     return (
         <div className='' >
@@ -25,11 +28,10 @@ export default function Sidebar({...props}){
                         {routes.map((route,index)=>{
                             if(route.type === 'menu'){
                                 return (
-                                    <Link to={`${baseRoute}${route.path}`} key={`sidebar-${index}`}>
+                                    <Link to={`${basePath}${route.path}`} key={`sidebar-${index}`}>
                                     <li  
                                     className={` p-3 rounded-md  mb-4 flex gap-4 items-center cursor-pointer text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${selected === index ? 'bg-indigo-400':''}`}
                                     onClick={()=>handleSelect(route,index)}>
-                                    
                                     
                                     {route.icon} <span>{route.name}</span>
                                     

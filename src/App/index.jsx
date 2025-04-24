@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './../Pages/Login'
 import RestartPassword from './../Pages/RestartPassword'
 import EmailResetPasswordForm from './../Pages/EmailResetPasswordForm'
@@ -19,13 +19,14 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
       <Routes>
-        <Route path='*' element={<Login />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
         <Route path='/login' element={<Login />}/>
         <Route path='/sidebar' element={<Sidebar />}/>
 
         <Route path='/reset-password' element={<RestartPassword />}/>
         <Route path='/EmailResetPasswordForm' element={<EmailResetPasswordForm />}/>
         <Route path='/gestion/*' element={<Private><AdminLayout /></Private>} />
+        <Route path='/app/*' element={<Private><AdminLayout /></Private>} />
 
       </Routes>
     </BrowserRouter>
