@@ -1,15 +1,20 @@
 import Card from "../Card";
 import { routes } from "../../routes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useBasePath } from "@/Hooks/useBasePath";
 
 
 export default function Sidebar({...props}){
     
-    
+    const { userRole } = props
+    const basePath = useBasePath()
+
     const [tittle,setTittle] = useState('Bienvenido')
     const [selected,setSelected] = useState(null)
+    useEffect(()=>{
+        console.log('SIDEBAR',userRole)
+    },[])
 
     const handleSelect = (item,index)=>{
         console.log(item.name, index)
@@ -17,7 +22,6 @@ export default function Sidebar({...props}){
         setSelected(index)
     }
 
-    const basePath = useBasePath()
 
     return (
         <div className='' >
@@ -25,8 +29,11 @@ export default function Sidebar({...props}){
                 <h1 className="font-bold text-gray-500">{tittle}</h1>
                 <section>
                     <ul>
-                        {routes.map((route,index)=>{
-                            if(route.type === 'menu'){
+                        {
+                            routes.map((route,index)=>{
+                                console.log(route)
+                            if(route.type === 'menu' && userRole === route.user){
+                                
                                 return (
                                     <Link to={`${basePath}${route.path}`} key={`sidebar-${index}`}>
                                     <li  

@@ -7,6 +7,8 @@ import Col from './../../Components/Col'
 import MenuBar from '../../Components/MenuBar'
 import Sidebar from './../../Components/Sidebar'
 import { routes } from '../../routes'
+import { useAuth } from '@/Context/AuthContext'
+import { RollerCoaster } from 'lucide-react'
 
 const getRoutes = (routes)=>{
     return routes.map((route,index)=>{
@@ -24,7 +26,7 @@ const getRoutes = (routes)=>{
 
 export default function AdminLayout(){
     
-    const [sidebarOpen,setSidebarOpen] = useState()
+    const { user } = useAuth()
 
     return (
         <>
@@ -36,7 +38,7 @@ export default function AdminLayout(){
             </Row>
             <Row className='flex pt-[100px] justify-end pr-10'>
                 <Col size={3} className='w-[250px] fixed top-[100px] left-0 bottom-0'>
-                    <Sidebar />
+                    <Sidebar userRole={user.role}/>
                 </Col>
                 <Col size={9} >
                 <div className='flex-1 bg-gray-50 dark:bg-gray-900 '>

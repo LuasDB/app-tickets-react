@@ -1,10 +1,10 @@
-import apiClient from './apiClient'
+import api from './apiClient'
 
 const apiService = {
-    get:(endpoint, config={})=> apiClient.get(endpoint,config),
-    post:(endpoint, data, config={})=> apiClient.post(endpoint,data,config),
-    patch: (endpoint, data, config = {}) => apiClient.patch(endpoint, data, config),
-    delete: (endpoint, config = {}) => apiClient.delete(endpoint, config),
+    get:(endpoint, config={})=> api.get(endpoint,config),
+    post:(endpoint, data, config={})=> api.post(endpoint,data,config),
+    patch: (endpoint, data, config = {}) => api.patch(endpoint, data, config),
+    delete: (endpoint, config = {}) => api.delete(endpoint, config),
 
 }
 

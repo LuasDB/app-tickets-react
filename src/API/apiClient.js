@@ -1,11 +1,11 @@
 import axios from 'axios'
 
-const apiClient = axios.create({
+const api = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
     timeout:10000,
 })
 
-apiClient.interceptors.response.use(
+api.interceptors.response.use(
     response => response,
     error =>{
         if(error.response.status === 401){
@@ -15,7 +15,7 @@ apiClient.interceptors.response.use(
     }
 )
 
-apiClient.interceptors.request.use(
+api.interceptors.request.use(
     config =>{
         if(!(config.data instanceof FormData)){
             config.headers['Content-Type']='application/json'
@@ -26,4 +26,4 @@ apiClient.interceptors.request.use(
         return Promise.reject(error)
     }
 )
-export default apiClient
+export default api
