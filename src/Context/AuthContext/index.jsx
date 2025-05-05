@@ -60,8 +60,14 @@ const AuthProvider = ({children})=>{
 
     }
 
+    const updateServiceTime = (serviceTime)=>{
+        setUser((prev)=>{
+            return {...prev,serviceTime}
+        })
+    }
+
     return (
-        <AuthContext.Provider value={{user,loading,login,logout}}>
+        <AuthContext.Provider value={{user,loading,login,logout,updateServiceTime}}>
             {children}
         </AuthContext.Provider>
     )

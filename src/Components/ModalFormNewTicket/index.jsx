@@ -12,7 +12,7 @@ import { useAuth } from '@/Context/AuthContext';
 
 export default function ModalFormNewTicket({openForm,onClose,onAdd}){
     const [formData,setFormData] = useState({
-        tittle:'',
+        issue:'',
         description:'',
         
     })
@@ -60,7 +60,7 @@ export default function ModalFormNewTicket({openForm,onClose,onAdd}){
         try {
             console.log('ENVIANDO TICKET',formData)
             const { data } = await ticketsService.create({
-                tittle:formData.tittle,
+                issue:formData.issue,
                 user,
                 firstMessage:{message:formData.description,date:new Date().toISOString(),user},
                 createAt:new Date().toISOString()})

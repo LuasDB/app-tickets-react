@@ -1,7 +1,10 @@
 import { IoPeopleSharp } from "react-icons/io5"
 import { RiCustomerService2Fill } from "react-icons/ri"
+import { MdAccountCircle } from "react-icons/md"
 import Customers from "@/Views/Admin/Customers"
-import Tickets from "@/Views/Users/Tickets"
+import {TicketsView} from "@/Views/Users/TicketsView"
+import { ConfigView } from "./Views/Users/Config"
+
 const routes = [
     {
         path:'/clientes',
@@ -13,14 +16,24 @@ const routes = [
 
     },
     {
-        path:'/tickets',
-        name:'Tickets',
-        icon: <RiCustomerService2Fill />,
-        component:<Tickets />,
+        path:'/account',
+        name:'Mi cuenta',
+        icon: <MdAccountCircle />,
+        component:<ConfigView />,
         type:'menu',
         user:'client'
 
     },
+    {
+        path:'/tickets',
+        name:'Tickets',
+        icon: <RiCustomerService2Fill />,
+        component:<TicketsView />,
+        type:'menu',
+        user:'client'
+
+    },
+    
     {
         path:'/solicitudes',
         name:'Clientes',

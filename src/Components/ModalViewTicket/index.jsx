@@ -1,147 +1,174 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
+import { toast } from "sonner"
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Alert } from "@mui/material";
-import customersService from '@/API/customersService';
+export function ModalViewTicket({ ticket, open, onClose,onSendMessage  }) {
+  const [showMessageForm, setShowMessageForm] = useState(false)
+  const [newMessage, setNewMessage] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
+  if (!ticket) return null
 
-export default function ModalViewEditClient({item,modo,onClose,onUpdate}){
-
-  const [error,setError] = useState(false)
-  const [messageError,setMessageError] = useState('')
-  const [isUpdate, setIsUpdate] = useState(false)
-
-  const [formData,setFormData] = useState({
-    name:'',
-    email:'',
-    company:'',
-  })
-  const [errors, setErrors] = useState({
-    name: false,
-    email: false,
-    company: false,
-  })
-
-  const handleChange = (e)=>{
+  const handleSubmitMessage = async (e) => {
     e.preventDefault()
-    const { name,value } = e.target
-    setFormData({...formData,
-      [name]:value
-    })
-  }
-
-  const verification = ()=>{
-    const newErrors = {
-      name: formData.name.trim() === '',
-      email: formData.email.trim() === '',
-      company: formData.company.trim() === '',
+    if (!newMessage.trim()) {
+      toast.error('Por favor, escribe un mensaje')
+      return
     }
-  
-    setErrors(newErrors)
-  
-    
-    const hasError = Object.values(newErrors).some((err) => err)
-    if (hasError) {
-     setError(true)
-     setMessageError('Ningun campo puede estar vacio')
-      return false
-    }
-  
-    return true
-  }
 
-  const handleSubmit = async()=>{
-    
-    if(verification()){
+    setIsSubmitting(true)
     try {
-      const { data } = await customersService.update(item._id,formData)
-
-      if(data.success){
-        setIsUpdate(true)
-        setTimeout(()=>{
-          onUpdate({...item,...formData})
-          onClose()
-        },1500)
-      }
+      await onSendMessage(ticket._id, newMessage)
+      setNewMessage('')
+      setShowMessageForm(false)
+      toast.success('Mensaje enviado exitosamente')
     } catch (error) {
-      console.log(error)
-      setError(true)
-      setMessageError('Algo salio Mal, por favor intente más tarde')
+      toast.error('Error al enviar el mensaje',error)
+      setShowMessageForm(false)
+    } finally {
+      setIsSubmitting(false)
     }
-      
-    }
-
   }
-    useEffect(()=>{
-      setFormData({
-        name:item.name,email:item.email,company:item.company
-      })
-    },[])
 
-    return (
-        <Dialog open={!!item} onOpenChange={onClose} >
-        <DialogContent className="bg-gray-50 text-blue-800 dark:bg-gray-900 dark:text-white w-full max-w-4xl">
-        {isUpdate && (<Alert severity="success" onClose={() => setIsUpdate(false)}>Se Actualizó el registro</Alert>)}
-          <DialogHeader>
-            <DialogTitle>{modo === 'ver' ? 'Datos de cliente' : 'Editar cliente'}</DialogTitle>
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[800px] h-[90vh] flex flex-col p-0 dark:bg-gray-800 dark:text-gray-50">
+        <div className="px-6 py-4 border-b dark:text-white">
+          <DialogHeader >
+            <DialogTitle >Ticket #{ticket._id}</DialogTitle>
+            <DialogTitle className="text-gray-800' dark:text-white">{ticket.title}</DialogTitle>
+            <DialogDescription>
+              <div className='flex flex-row justify-between'>
+                
+                <CardContent className="py-4 text-center text-gray-500">
+                Creado el {new Date(ticket.createdAt).toLocaleDateString()}, {new Date(ticket.createdAt).toLocaleTimeString()}
+                
+                </CardContent>
+
+                <div className="flex flex-row gap-5">
+              <div>
+                <h4 className="text-sm font-medium mb-1">Estado</h4>
+                <Badge className={ticket.status === 'open' ? 'bg-green-500' : 'bg-gray-500'}>
+                  {ticket.status === 'open' ? 'Abierto' : 'Cerrado'}
+                </Badge>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-medium mb-1">Prioridad</h4>
+                <Badge className={
+                  ticket.priority === 'Alta' ? 'bg-red-500' : 
+                  ticket.priority === 'Media' ? 'bg-yellow-500' : 'bg-blue-500'
+                }>
+                  {ticket.priority}
+                </Badge>
+              </div>
+              </div>
+              </div>
+              
+            </DialogDescription>
+
           </DialogHeader>
-  
-          <div className="space-y-4 ">
-          <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Nombre
-              </label>
-              <Input
-                name='name'
-                disabled={modo === 'ver'}
-                value={formData.name}
-                placeholder="Nombre"
-                className={`'disabled:dark:text-white' ${errors.name ? 'border-red-500 ring-1 ring-red-500':''}`}
-                onChange={handleChange}
-              />
-          </div>
-          <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Correo
-              </label>
-              <Input
-                name='email'
-                disabled={modo === 'ver'}
-                value={formData.email}
-                placeholder="Nombre"
-                className={`'disabled:dark:text-white' ${errors.email ? 'border-red-500 ring-1 ring-red-500':''}`}
-                onChange={handleChange}
-              />
-          </div>
-          <div>
-              <label htmlFor="company" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Empresa
-              </label>
-              <Input
-                name='company'
-                disabled={modo === 'ver'}
-                defaultValue={formData.company}
-                placeholder="Nombre"
-                className={`'disabled:dark:text-white' ${errors.company ? 'border-red-500 ring-1 ring-red-500':''}`}
-                onChange={handleChange}
-              />
-          </div> 
-  
-            {modo === 'edit' && (
-              <Button className="bg-indigo-600 text-white hover:bg-indigo-700"
-              onClick={handleSubmit}>
-                Guardar cambios
-              </Button>
-            )}
-          </div>
-          {error && (<Alert severity="warning" onClose={() => setError(false)}>{messageError}</Alert>)}
-        </DialogContent>
-            
-        
-      </Dialog>
-    )
+        </div>
 
+        <div className="flex-1 overflow-y-auto px-6 py-4">
+          <div className="space-y-4">
+                 {/* Botón para mostrar formulario de respuesta */}
+            {ticket.status === 'open' && !showMessageForm && (
+              <div className="flex justify-end">
+                <Button 
+                  onClick={() => setShowMessageForm(true)}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                >
+                  Responder
+                </Button>
+              </div>
+            )}
+              {/* Formulario de respuesta */}
+              {showMessageForm && ticket.status === 'open' && (
+              <Card className='dark:bg-gray-900'>
+                <CardContent className="pt-4">
+                  <form onSubmit={handleSubmitMessage} className="space-y-4">
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-medium dark:text-white">Nuevo Mensaje</h4>
+                      <Textarea
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
+                        placeholder="Escribe tu mensaje aquí..."
+                        className="min-h-[100px] appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        disabled={isSubmitting}
+                      />
+                    </div>
+                    <div className="flex gap-2 justify-end">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setShowMessageForm(false)
+                          setNewMessage('')
+                        }}
+                        disabled={isSubmitting}
+                        className='dark:bg-red-600 bg-red-400 hover:bg-red-600 dark:hover:bg-red-400'
+                      >
+                        Cancelar
+                      </Button>
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                      >
+                        {isSubmitting ? 'Enviando...' : 'Enviar mensaje'}
+                      </Button>
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+            )}
+
+            {ticket.status === 'closed' && (
+              <Card className="bg-muted">
+                <CardContent className="py-4 text-center text-gray-500">
+                  Este ticket está cerrado. No se pueden enviar más mensajes.
+                </CardContent>
+              </Card>
+            )}
+
+            
+
+            {/* Historial de mensajes */}
+            <div className="space-y-4">
+              {ticket.messages
+                ?.slice()
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .map((message, index) => (
+                  <Card key={`message-${index}`} className="w-full dark:bg-gray-900">
+                    <CardContent className="pt-4">
+                      <div className="border-b pb-2 mb-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-blue-800">{message.user.nombre}</span>
+                          <span className="text-sm text-gray-500">
+                            {new Date(message.createdAt).toLocaleDateString()}, {new Date(message.createdAt).toLocaleTimeString()}
+                          </span>
+                        </div>
+                      </div>
+                      <p className="dark:text-gray-50 whitespace-pre-wrap">{message.message}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
 
 }

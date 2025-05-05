@@ -13,11 +13,9 @@ export default function Sidebar({...props}){
     const [tittle,setTittle] = useState('Bienvenido')
     const [selected,setSelected] = useState(null)
     useEffect(()=>{
-        console.log('SIDEBAR',userRole)
     },[])
 
     const handleSelect = (item,index)=>{
-        console.log(item.name, index)
         setTittle(item.name)
         setSelected(index)
     }
@@ -31,7 +29,6 @@ export default function Sidebar({...props}){
                     <ul>
                         {
                             routes.map((route,index)=>{
-                                console.log(route)
                             if(route.type === 'menu' && userRole === route.user){
                                 
                                 return (
