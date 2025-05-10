@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Alert } from "@mui/material";
 import { useAuth } from "../../Context/AuthContext";
+import  logo  from './../../assets/logo_omegasys.png'
+import logoDark from './../../assets/omegasys_white.png'
+import { useMediaQuery } from "react-responsive";
 
 export default function Login(){
 
@@ -9,6 +12,19 @@ export default function Login(){
   const [error,setError] = useState(false)
   const [messageError, setMessageError] = useState("");
   const [isAuthenticated,setIsAuthenticated] = useState(false)
+  const [isDarkMode,setIsDarkMode] = useState(false)
+  const isMobile = useMediaQuery({query:'(max-heigth:780px)'})
+
+  useEffect(()=>{
+    const root = document.documentElement
+    const checkDark = () => setIsDarkMode(root.classList.contains("dark"))
+
+    checkDark(); 
+    const observer = new MutationObserver(checkDark)
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] })
+
+    return () => observer.disconnect()
+  },[])
 
   const navigator = useNavigate()
 
@@ -37,13 +53,13 @@ export default function Login(){
     
       
     } catch (error) {
-      console.error(error)
+       console.error(error)
 
             setError(true)
             if(error.response && error.response.data && error.response.data.message){
                 setMessageError(error.response.data.message)
             }else{
-                setMessageError('Ocurrió un error al procesar tu solicitud. Intenta de nuevo más tarde.');
+                setMessageError(`'Ocurrió un error al procesar tu solicitud. Intenta de nuevo más tarde.${error.message}'`);
             }
     }
 
@@ -56,12 +72,17 @@ export default function Login(){
     {isAuthenticated && (<Alert severity="success" onClose={() => setIsAuthenticated(false)}>Acceso correcto, Bienvenido {user.nombre}</Alert>)}
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
       <div className="max-w-md w-full p-6 space-y-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
-        <div>
-          <h2 className="text-center text-3xl font-bold text-gray-900 dark:text-white">
-            Soporte Técnico Omegasys
-          </h2>
-        </div>
-        <form className="mt-8 space-y-6" >
+         <div className={`flex flex-col items-center gap-2 dark:text-white`}>
+                  <img
+                    src={isDarkMode ? logoDark : logo}
+                    alt="Logo de la empresa"
+                    className="h-10 object-contain"
+                  />
+                  <span className={`${isMobile?'text-[12px] ':'text-xl font-semibold block ' }   text-gray-800 dark:text-white  `}>
+                    Soporte OMEGASYS
+                  </span>
+                </div>
+        <form className="mt-8 space-y-6 flex flex-col justify-center" >
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -95,10 +116,10 @@ export default function Login(){
             </div>
           </div>
   
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-center">
             <div className="flex items-center">
               <a 
-              className="decoration-none dark:text-gray-50"
+              className="decoration-none dark:text-gray-50 text-purple-700"
               href={`${import.meta.env.VITE_APP_BASE_URL}/EmailResetPasswordForm`}>Olvide mi contraseña</a>
               
             </div>

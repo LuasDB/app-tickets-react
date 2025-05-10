@@ -7,7 +7,7 @@ import { useBasePath } from "@/Hooks/useBasePath";
 
 export default function Sidebar({...props}){
     
-    const { userRole } = props
+    const { userRole,toggleSidebar,isMobile } = props
     const basePath = useBasePath()
 
     const [tittle,setTittle] = useState('Bienvenido')
@@ -18,6 +18,7 @@ export default function Sidebar({...props}){
     const handleSelect = (item,index)=>{
         setTittle(item.name)
         setSelected(index)
+        if(isMobile)toggleSidebar()
     }
 
 

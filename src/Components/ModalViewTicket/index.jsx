@@ -41,9 +41,9 @@ export function ModalViewTicket({ ticket, open, onClose,onSendMessage  }) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={onClose} >
       <DialogContent className="sm:max-w-[800px] h-[90vh] flex flex-col p-0 dark:bg-gray-800 dark:text-gray-50">
-        <div className="px-6 py-4 border-b dark:text-white">
+        <div className={` px-6 py-4 border-b dark:text-white`}>
           <DialogHeader >
             <DialogTitle >Ticket #{ticket._id}</DialogTitle>
             <DialogTitle className="text-gray-800' dark:text-white">{ticket.title}</DialogTitle>

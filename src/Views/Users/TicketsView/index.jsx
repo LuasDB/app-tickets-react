@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Toaster,toast } from "sonner"
 import { useAuth } from '@/Context/AuthContext'
+import { useMediaQuery } from 'react-responsive'
+
 import ticketsService from '@/API/ticketsService'
 import socket from '@/API/socket'
 
@@ -15,6 +17,8 @@ export function TicketsView() {
   const [searchTerm, setSearchTerm] = useState('')
   const [tickets, setTickets] = useState([]) 
   const { user } = useAuth()
+  const isMobile = useMediaQuery({query:'(max-width:768px)'})
+
 
   useEffect(()=>{
     getDataUser()
@@ -61,6 +65,7 @@ export function TicketsView() {
       status: 'open',
       createdAt: new Date().toISOString(),
       user,
+      company:user.company,
       firstMessage:{
         title:ticketData.title,
         message:ticketData.description,
@@ -119,7 +124,7 @@ export function TicketsView() {
           <TabsTrigger value="list">Mis Tickets</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="create" className="flex justify-center ">
+        <TabsContent value="create" className="flex justify-center">
           <SupportTicketForm onSubmit={handleCreateTicket} />
         </TabsContent>
 
@@ -152,6 +157,7 @@ export function TicketsView() {
         open={!!selectedTicket}
         onClose={() => setSelectedTicket(null)}
         onSendMessage={handleSendMessage}
+        className={`${isMobile ? 'pt-10' : ''}`}
       />
     </div>
   )

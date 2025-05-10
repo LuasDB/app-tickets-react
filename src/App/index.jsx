@@ -13,7 +13,7 @@ function App() {
 
   return (
     <>
-    <div className='p-1 fixed z-[9999] right-3 top-5'>
+    <div className='p-1 fixed z-[9999] right-3 bottom-5'>
       <ThemeToggle />
     </div>
     <AuthProvider>

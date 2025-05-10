@@ -2,6 +2,7 @@ import api from "./apiService";
 
 const ticketsService = {
     getAllByUser: (userId)=> api.get(`tickets/${userId}`),
+    getAllTickets:()=> api.get(`tickets/`),
     getById: (id)=> api.get(`collections/tickets/${id}`),
     create: (data)=> api.post('tickets/',data),
     hoursPurchases: (data)=> api.post('tickets/service-hours-purchases',data),

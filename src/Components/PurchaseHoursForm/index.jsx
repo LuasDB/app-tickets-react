@@ -64,7 +64,7 @@ export function PurchaseHoursForm() {
       }
       
     } catch (error) {
-      toast.error('Error al procesar la compra')
+      toast.error('Error al procesar la compra',error)
     } finally {
       setIsProcessing(false)
     }

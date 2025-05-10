@@ -9,14 +9,12 @@ import {
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { FaCheckDouble } from "react-icons/fa";
-import { useAuth } from "@/Context/AuthContext";
 
 
-export function TableTicketsClient({ tickets, onViewTicket }) {
+export function TableTicketsAdmin({ tickets, onViewTicket,myUser }) {
   const getStatusColor = (status) => {
     return status === 'open' ? 'bg-green-500' : 'bg-gray-500'
   }
-  const { user } = useAuth()
 
   const getPriorityColor = (priority) => {
     switch (priority) {
@@ -32,18 +30,20 @@ export function TableTicketsClient({ tickets, onViewTicket }) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className='min-w-[150px]'>Título</TableHead>
+            <TableHead className='min-w-[150px]'>Empresa</TableHead>
+            <TableHead className='min-w-[150px]'>Asunto</TableHead>
             <TableHead>Estado</TableHead>
             <TableHead>Prioridad</TableHead>
             <TableHead>Fecha Inicio</TableHead>
             <TableHead>Acciones</TableHead>
             <TableHead>Ultima Actualización</TableHead>
-
           </TableRow>
         </TableHeader>
         <TableBody>
           {tickets.map((ticket) => (
             <TableRow key={ticket._id} className='text-left'>
+              <TableCell>{ticket.company}</TableCell>
+
               <TableCell>{ticket.title}</TableCell>
               <TableCell>
                 <Badge className={getStatusColor(ticket.status)}>
@@ -68,7 +68,7 @@ export function TableTicketsClient({ tickets, onViewTicket }) {
                  
               </TableCell>
               <TableCell className='text-right'>
-                <FaCheckDouble className={`${ticket.messages[ticket.messages.length - 1].user.userId === user.userId ? 'text-gray-400' : 'text-blue-600'}`}/>
+                <FaCheckDouble className={`${ticket.messages[ticket.messages.length - 1].user.userId === myUser.userId ? 'text-gray-400' : 'text-blue-600'}`}/>
               </TableCell>
             </TableRow>
           ))}

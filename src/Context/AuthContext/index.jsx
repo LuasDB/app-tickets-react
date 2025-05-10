@@ -1,10 +1,13 @@
 import { createContext,useState,useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
+import socket from '@/API/socket';
+
 
 import { jwtDecode } from 'jwt-decode'
 
 import apiClient from '../../API/apiClient';
+import newStyled from '@emotion/styled';
 
 const AuthContext = createContext()
 
@@ -25,6 +28,14 @@ const AuthProvider = ({children})=>{
             setUser(null)
         }
         setLoading(false)
+
+        socket.on('new_ticket',(newTicket)=>{
+            console.log('Nuevos datos de un ticket desde el servidor',newTicket)
+            
+        })
+        return ()=>{
+            socket.off('new_ticket')
+        }
     },[])
 
     const login = async(email, password)=>{
