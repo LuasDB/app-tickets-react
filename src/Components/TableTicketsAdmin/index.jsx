@@ -30,18 +30,28 @@ export function TableTicketsAdmin({ tickets, onViewTicket,myUser }) {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead>Ultima Actualización</TableHead>
+            <TableHead></TableHead>
             <TableHead className='min-w-[150px]'>Empresa</TableHead>
             <TableHead className='min-w-[150px]'>Asunto</TableHead>
             <TableHead>Estado</TableHead>
             <TableHead>Prioridad</TableHead>
             <TableHead>Fecha Inicio</TableHead>
             <TableHead>Acciones</TableHead>
-            <TableHead>Ultima Actualización</TableHead>
+            
           </TableRow>
         </TableHeader>
         <TableBody>
           {tickets.map((ticket) => (
             <TableRow key={ticket._id} className='text-left'>
+            <TableCell className='flex flex-col text-center'>
+                <div>{new Date(ticket.messages[ticket.messages.length - 1].createdAt).toLocaleDateString()}</div>
+                <div>{new Date(ticket.messages[ticket.messages.length - 1].createdAt).toLocaleTimeString()}</div>
+                 
+              </TableCell>
+              <TableCell className='text-right'>
+                <FaCheckDouble className={`${ticket.messages[ticket.messages.length - 1].user.userId === myUser.userId ? 'text-gray-400' : 'text-blue-600'}`}/>
+              </TableCell>
               <TableCell>{ticket.company}</TableCell>
 
               <TableCell>{ticket.title}</TableCell>
@@ -62,14 +72,7 @@ export function TableTicketsAdmin({ tickets, onViewTicket,myUser }) {
                   Ver Detalles
                 </Button>
               </TableCell>
-              <TableCell className='flex flex-col text-center'>
-                <div>{new Date(ticket.messages[ticket.messages.length - 1].createdAt).toLocaleDateString()}</div>
-                <div>{new Date(ticket.messages[ticket.messages.length - 1].createdAt).toLocaleTimeString()}</div>
-                 
-              </TableCell>
-              <TableCell className='text-right'>
-                <FaCheckDouble className={`${ticket.messages[ticket.messages.length - 1].user.userId === myUser.userId ? 'text-gray-400' : 'text-blue-600'}`}/>
-              </TableCell>
+              
             </TableRow>
           ))}
         </TableBody>

@@ -39,10 +39,34 @@ export function TicketsView() {
         return updated;
       });
     };
+    const handleFinished = (data)=>{
+      console.log('En el finished',data)
+      console.log('En Los tickets',tickets)
+
+      setTickets(prevTickets =>
+        prevTickets.map(ticket =>
+          ticket._id === data.ticketId
+            ? {
+                ...ticket,
+                status: 'close',
+                consumedHours: data.consumedHours,
+                resume: data.resume,
+                finishedAt: data.finishedAt
+              }
+            : ticket
+        )
+      )
+      
+    }
   
-    socket.on('new_message', handleNewMessage);
+    socket.on('new_message', handleNewMessage)
+    socket.on('finished_ticket', handleFinished)
   
-    return () => socket.off('new_message', handleNewMessage);
+    return () => {
+      socket.off('new_message', handleNewMessage)
+      socket.off('finished_ticket', handleFinished)
+
+      };
   }, []);
   
 
@@ -78,8 +102,9 @@ export function TicketsView() {
       const { data } = await ticketsService.create(newTicket)
       if(data.success){
 
-        setTickets([data.data, ...tickets])
+        setTickets([...tickets,data.data])
         toast.success('Ticket creado exitosamente')
+        return true
       }
       
     } catch (error) {

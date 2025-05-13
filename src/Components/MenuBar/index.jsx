@@ -51,7 +51,7 @@ export default function MenuBar({...props}) {
         <div className={`${isMobile ? 'mt-4 flex-row justify-between w-full' : ' items-center gap-4 justify-between'} flex`}>
           <div className="text-right sm:block">
             <div className="text-[10px] font-medium text-gray-800 dark:text-white">{user.nombre}</div>
-            <div className="text-xs text-gray-500">{user.email}</div>
+            <div className="text-xs text-gray-500">{user.company}</div>
           </div>
           <button
             onClick={handleLogout}

@@ -32,18 +32,28 @@ export function TableTicketsClient({ tickets, onViewTicket }) {
       <Table>
         <TableHeader>
           <TableRow>
+          <TableHead>Ultima Actualización</TableHead>
+          <TableHead></TableHead>
+
             <TableHead className='min-w-[150px]'>Título</TableHead>
             <TableHead>Estado</TableHead>
             <TableHead>Prioridad</TableHead>
             <TableHead>Fecha Inicio</TableHead>
             <TableHead>Acciones</TableHead>
-            <TableHead>Ultima Actualización</TableHead>
 
           </TableRow>
         </TableHeader>
         <TableBody>
           {tickets.map((ticket) => (
             <TableRow key={ticket._id} className='text-left'>
+            <TableCell className='flex flex-col text-center'>
+                <div>{new Date(ticket.messages[ticket.messages.length - 1].createdAt).toLocaleDateString()}</div>
+                <div>{new Date(ticket.messages[ticket.messages.length - 1].createdAt).toLocaleTimeString()}</div>
+                 
+              </TableCell>
+              <TableCell className='text-right'>
+                <FaCheckDouble className={`${ticket.messages[ticket.messages.length - 1].user.userId === user.userId ? 'text-gray-400' : 'text-blue-600'}`}/>
+              </TableCell>
               <TableCell>{ticket.title}</TableCell>
               <TableCell>
                 <Badge className={getStatusColor(ticket.status)}>
@@ -62,14 +72,7 @@ export function TableTicketsClient({ tickets, onViewTicket }) {
                   Ver Detalles
                 </Button>
               </TableCell>
-              <TableCell className='flex flex-col text-center'>
-                <div>{new Date(ticket.messages[ticket.messages.length - 1].createdAt).toLocaleDateString()}</div>
-                <div>{new Date(ticket.messages[ticket.messages.length - 1].createdAt).toLocaleTimeString()}</div>
-                 
-              </TableCell>
-              <TableCell className='text-right'>
-                <FaCheckDouble className={`${ticket.messages[ticket.messages.length - 1].user.userId === user.userId ? 'text-gray-400' : 'text-blue-600'}`}/>
-              </TableCell>
+             
             </TableRow>
           ))}
         </TableBody>

@@ -37,10 +37,39 @@ export function Tickets(){
           return updated;
         });
       };
+      const handleNewTicket = (newTicket)=>{
+        setTickets(prev=>[
+          ...prev,newTicket
+        ])
+      }
+      const handleFinished = (data)=>{
+        console.log('En el finished',data)
+        console.log('En los tickets',tickets)
+        setTickets(prevTickets =>
+          prevTickets.map(ticket =>
+            ticket._id === data.ticketId
+              ? {
+                  ...ticket,
+                  status: 'close',
+                  consumedHours: data.consumedHours,
+                  resume: data.resume,
+                  finishedAt: data.finishedAt
+                }
+              : ticket
+          )
+        )
+        
+      } 
     
-      socket.on('new_message', handleNewMessage);
+      socket.on('new_message', handleNewMessage)
+      socket.on('new_ticket',handleNewTicket)
+      socket.on('finished_ticket', handleFinished)
     
-      return () => socket.off('new_message', handleNewMessage);
+      return () =>{ 
+        socket.off('new_message', handleNewMessage)
+        socket.off('new_ticket', handleNewTicket)
+        socket.off('finished_ticket', handleFinished)
+      }
     }, []);
 
 
@@ -72,6 +101,27 @@ export function Tickets(){
       } catch (error) {
         toast.error(`'No se logro actualizar la información, intenta más tarde\n[ERROR]:${error}`)
       } 
+    }
+    const handleFinishedTicket = async(data,ticket)=>{
+      
+      const toSend={
+        ticketId:ticket._id,
+        userId:ticket.userId,
+        consumedHours:data.hours,
+        resume:data.resume,
+        finishedAt:new Date().toISOString()
+      }
+      try {
+        console.log('Los datos a enviar :',toSend)
+        const { data } = await ticketsService.finishedTicket(toSend)
+        if(data.success){
+          console.log(data)
+          toast.success(`${data.message}`)
+          setSelectedTicket(null)
+        }
+      } catch (error) {
+        toast.error(`ALgo salio mal enviar información ${error}}`)
+      }
     }
 
     const filteredTickets = tickets.filter(ticket => 
@@ -115,6 +165,8 @@ export function Tickets(){
               onClose={() => setSelectedTicket(null)}
               onSendMessage={handleSendMessage}
               className={`${isMobile ? 'pt-10' : ''}`}
+              typeUser={user.role === 'admin' ? true:false}
+              finishedTicket={handleFinishedTicket}
               />
 
         </div>

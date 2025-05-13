@@ -14,7 +14,7 @@ export default function Customers(){
         {key:'name',label:'Nombre'},
         {key:'email',label:'Email'},
         {key:'company',label:'Empresa'},
-        {key:'serviceTimeTotal',label:'Horas a cuenta',render:(row)=>row.serviceTime?.total ?? 0 }
+        {key:'serviceTimeTotal',label:'Horas a cuenta',render:(row)=>row.serviceTime?.remaining ?? 0 }
 
     ]
 

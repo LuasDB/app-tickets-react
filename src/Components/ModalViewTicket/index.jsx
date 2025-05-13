@@ -8,14 +8,21 @@ import {
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
+import TicketPDF from '../TicketPdf'
 
-export function ModalViewTicket({ ticket, open, onClose,onSendMessage  }) {
+export function ModalViewTicket({ ticket, open, onClose,onSendMessage,typeUser,finishedTicket  }) {
   const [showMessageForm, setShowMessageForm] = useState(false)
   const [newMessage, setNewMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isFinishedTicket,setIsFinishedTicket] = useState(false)
+  const [formData,setFormData] = useState({
+  
+
+  })
 
   if (!ticket) return null
 
@@ -31,7 +38,6 @@ export function ModalViewTicket({ ticket, open, onClose,onSendMessage  }) {
       await onSendMessage(ticket._id, newMessage)
       setNewMessage('')
       setShowMessageForm(false)
-      toast.success('Mensaje enviado exitosamente')
     } catch (error) {
       toast.error('Error al enviar el mensaje',error)
       setShowMessageForm(false)
@@ -39,6 +45,8 @@ export function ModalViewTicket({ ticket, open, onClose,onSendMessage  }) {
       setIsSubmitting(false)
     }
   }
+
+
 
   return (
     <Dialog open={open} onOpenChange={onClose} >
@@ -74,11 +82,75 @@ export function ModalViewTicket({ ticket, open, onClose,onSendMessage  }) {
               </div>
               </div>
               </div>
+              <TicketPDF ticket={ticket}/>
               
             </DialogDescription>
 
           </DialogHeader>
         </div>
+
+       {typeUser && ( <div className="px-6 py-0">
+       
+          <Button 
+          onClick={() => setIsFinishedTicket(true)}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white">Cerrar Ticket</Button>
+        </div>)}
+
+        {isFinishedTicket && (
+          <div className='p-5'>
+            <div className="space-y-2">
+              <label htmlFor="resume" className="text-sm font-medium text-gray-700 dark:text-gray-300">Resumen de servicio</label>
+              <Textarea
+                id="resume"
+                value={formData.resume}
+                onChange={(e) => setFormData({ ...formData, resume: e.target.value })}
+                placeholder="Describe de forma breve el resumen del Ticket"
+                required
+                className="min-h-[100px] appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div className="space-y-2">
+            <label htmlFor="hours" className="text-sm font-medium text-gray-700 dark:text-gray-300">Horas del servicio</label>
+            <Input
+              id="hours"
+              type="number"
+              value={formData.hours}
+              onChange={(e) => setFormData({ ...formData, hours: parseFloat(e.target.value) })}
+              placeholder="Ejemplo: 0.25"
+              required
+              className='appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+
+            />
+            </div>
+            <div className='flex gap-2 mt-5'>
+            <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setFormData({})
+                          setIsFinishedTicket(false)
+                        }}
+                        disabled={isSubmitting}
+                        className='dark:bg-red-600 bg-red-400 hover:bg-red-600 dark:hover:bg-red-400'
+                      >
+                        Cancelar
+                      </Button>
+
+                      <Button
+                      type="button"
+              onClick={() => {
+                finishedTicket(formData,ticket)
+                setFormData({})
+                setIsFinishedTicket(false)}}
+                className="bg-indigo-600 hover:bg-green-700 text-white">
+                Finalizar</Button>
+
+
+          </div>
+            </div>
+            
+          
+        )}
 
         <div className="flex-1 overflow-y-auto px-6 py-4">
           <div className="space-y-4">
@@ -144,7 +216,6 @@ export function ModalViewTicket({ ticket, open, onClose,onSendMessage  }) {
 
             
 
-            {/* Historial de mensajes */}
             <div className="space-y-4">
               {ticket.messages
                 ?.slice()

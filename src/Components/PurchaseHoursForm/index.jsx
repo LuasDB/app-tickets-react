@@ -28,21 +28,25 @@ export function PurchaseHoursForm() {
       hours: 20,
       price: 2000,
       pricePerHour: 100,
-      recommended: false
+      recommended: false,
+      planName:'Básico'
     },
     {
       id: 2,
       hours: 50,
       price: 4500,
       pricePerHour: 90,
-      recommended: true
+      recommended: true,
+      planName:'Estandar'
+      
     },
     {
       id: 3,
       hours: 100,
       price: 8000,
       pricePerHour: 80,
-      recommended: false
+      recommended: false,
+      planName:'Pro'
     }
   ]
 
@@ -53,7 +57,7 @@ export function PurchaseHoursForm() {
     try {
       
       const {data} = await ticketsService.hoursPurchases({
-        user,selectedPlan
+        user,selectedPlan,createdAt:new Date().toISOString(),status:'open'
       })
 
       if(data.success){
@@ -99,7 +103,8 @@ export function PurchaseHoursForm() {
               <CardContent className="pt-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Clock className="h-5 w-5 text-muted-foreground" />
-                  <h3 className="text-2xl font-bold">{plan.hours} horas</h3>
+                  <h3 className="text-2xl font-bold text-blue-800">{plan.planName}</h3>
+                  <h2 className="font-bold text-lg">{plan.hours} horas</h2>
                 </div>
                 
                 <div className="space-y-2">

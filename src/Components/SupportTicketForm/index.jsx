@@ -13,8 +13,10 @@ export function SupportTicketForm({ onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSubmit(formData)
-    setFormData({ title: '', description: '', priority: 'Media' })
+    if(onSubmit(formData)){
+      setFormData({ title: '', description: '', priority: 'Media' })
+
+    }else{ return }
   }
 
   return (

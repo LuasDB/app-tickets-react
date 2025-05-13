@@ -5,11 +5,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { PurchaseHoursForm } from "@/Components/PurchaseHoursForm"
 import { Clock, Ticket, AlertCircle } from "lucide-react"
 import { useAuth } from "@/Context/AuthContext"
+import { CiWarning } from "react-icons/ci"
 
 export function ConfigView() {
  
 
   const { user } = useAuth()
+  
 
   return (
     <div className="container mx-auto py-8 space-y-8">
@@ -24,7 +26,7 @@ export function ConfigView() {
           <CardContent>
             <div className="text-2xl font-bold">{user.serviceTime.total} horas</div>
             <p className="text-xs text-muted-foreground">
-              Paquete actual de servicio
+              Horas desde contratacion a la fecha
             </p>
           </CardContent>
         </Card>
@@ -66,22 +68,24 @@ export function ConfigView() {
       </div>
 
      
-      {parseFloat(user.serviceTime.remaining) < 10 && (
-        <Card className="bg-yellow-50 border-yellow-200">
-          <CardContent className="flex items-center space-x-4 py-4">
-            <AlertCircle className="h-5 w-5 text-yellow-500" />
-            <div>
+      {parseFloat(user.serviceTime.remaining) < 2 && (
+        <Card className="bg-yellow-50 border-yellow-200 items-center">
+          <CardContent className="flex flex-col md:flex-row justify-center gap-4 items-center p-4">
+          <CiWarning className="h-10 w-10 text-yellow-500 "/>
+            <div className="space-y-4">
+            
               <p className="font-medium text-yellow-800">Horas de servicio bajas</p>
               <p className="text-sm text-yellow-600">
                 Te quedan pocas horas de servicio. Considera comprar más horas para mantener el soporte ininterrumpido.
               </p>
-            </div>
-            <Button 
+              <Button 
               className="ml-auto bg-yellow-500 hover:bg-yellow-600 text-white"
               onClick={() => document.getElementById('purchase-section').scrollIntoView({ behavior: 'smooth' })}
             >
               Comprar Horas
             </Button>
+            </div>
+            
           </CardContent>
         </Card>
       )}

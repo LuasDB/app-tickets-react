@@ -33,8 +33,31 @@ const AuthProvider = ({children})=>{
             console.log('Nuevos datos de un ticket desde el servidor',newTicket)
             
         })
+        socket.on('update_plan',(data)=>{
+            console.log('Nuevos datos de un ticket desde el servidor',data)
+            setUser(prev=>{
+               return {...prev,serviceTime:{
+                ...prev.serviceTime,
+                total:prev.serviceTime.total + data.hours,
+                remaining:prev.serviceTime.remaining + data.hours,
+               }}
+            })
+        })
+        socket.on('finished_ticket',(data)=>{
+            setUser(prev=>({
+                ...prev,
+                serviceTime:{
+                    ...prev.serviceTime,
+                    activeTickets:prev.serviceTime.activeTickets -1,
+                    remaining:prev.serviceTime.remaining - data.consumedHours,
+                    used:prev.serviceTime.used + data.consumedHours
+                }
+            }))
+        })
+        
         return ()=>{
             socket.off('new_ticket')
+            socket.off('update_plan')
         }
     },[])
 
