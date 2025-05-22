@@ -43,7 +43,7 @@ export default function MenuBar({...props}) {
             className="h-10 object-contain"
           />
           <span className={`${isMobile?'text-[12px] ':'text-xl font-semibold block ' }   text-gray-800 dark:text-white  `}>
-            Soporte OMEGASYS
+            Soporte Técnico TI
           </span>
         </div>
 

@@ -11,7 +11,9 @@ export default function ModalFormClient({openForm,onClose,onAdd}){
     const [formData,setFormData] = useState({
         name:'',
         company:'',
-        email:''
+        email:'',
+        type:''
+
     })
     const [formError,setFormError] = useState({})
 
@@ -85,6 +87,7 @@ export default function ModalFormClient({openForm,onClose,onAdd}){
                 <CustomFormGroup label={'Empresa'} name={'company'} onChange={handleChange}  error={formError.company }/>
                 <CustomFormGroup label={'Contacto'} name={'name'} onChange={handleChange} error={formError.name}/>
                 <CustomFormGroup label={'Correo'} name={'email'} onChange={handleChange} error={formError.email}/>
+                <CustomFormGroup label={'Tipo de cliente'} name={'type'} onChange={handleChange} error={formError.type} type={'select'} options={[{label:'Cobro por horas',value:'normal'},{label:'Cliente con poliza',value:'poliza'}]}/>
                 <Button 
                     className="bg-indigo-600 text-white hover:bg-indigo-700"
                     onClick={handleSubmit}>

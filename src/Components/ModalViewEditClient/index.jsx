@@ -76,7 +76,7 @@ export default function ModalViewEditClient({item,modo,onClose,onUpdate}){
   }
     useEffect(()=>{
       setFormData({
-        name:item.name,email:item.email,company:item.company
+        name:item.name,email:item.email,company:item.company,type:item.type
       })
     },[])
 
@@ -125,6 +125,19 @@ export default function ModalViewEditClient({item,modo,onClose,onUpdate}){
                 defaultValue={formData.company}
                 placeholder="Nombre"
                 className={`'disabled:dark:text-white' ${errors.company ? 'border-red-500 ring-1 ring-red-500':''}`}
+                onChange={handleChange}
+              />
+          </div> 
+          <div>
+              <label htmlFor="type" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Tipo de cliente
+              </label>
+              <Input
+                name='type'
+                disabled={modo === 'ver'}
+                defaultValue={formData.type}
+                placeholder="Tipo de cliente"
+                className={`'disabled:dark:text-white' ${errors.type ? 'border-red-500 ring-1 ring-red-500':''}`}
                 onChange={handleChange}
               />
           </div> 

@@ -138,17 +138,14 @@ export function TicketsView() {
   )
 
   return (
-    <div className="container mx-auto py-8 space-y-8">
+    <div className="container mx-auto py-0 space-y-2">
       <h1 className="text-3xl font-bold">Sistema de Soporte Técnico</h1>
-      
       <Toaster />
-      
-      <Tabs defaultValue="create" className="space-y-4">
+      <Tabs defaultValue="create" className="space-y-2">
         <TabsList className='bg-gray-50 dark:bg-gray-800'>
           <TabsTrigger value="create">Crear Ticket</TabsTrigger>
           <TabsTrigger value="list">Mis Tickets</TabsTrigger>
         </TabsList>
-
         <TabsContent value="create" className="flex justify-center">
           <SupportTicketForm onSubmit={handleCreateTicket} />
         </TabsContent>

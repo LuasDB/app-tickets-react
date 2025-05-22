@@ -54,7 +54,8 @@ export function ModalViewTicket({ ticket, open, onClose,onSendMessage,typeUser,f
         <div className={` px-6 py-4 border-b dark:text-white`}>
           <DialogHeader >
             <DialogTitle >Ticket #{ticket._id}</DialogTitle>
-            <DialogTitle className="text-gray-800' dark:text-white">{ticket.title}</DialogTitle>
+            <DialogTitle className="text-gray-800 dark:text-white">{ticket.title}</DialogTitle>
+            <DialogTitle className="text-blue-800 dark:text-white">Usuario a quien se atenderá :{ticket.person}</DialogTitle>
             <DialogDescription>
               <div className='flex flex-row justify-between'>
                 

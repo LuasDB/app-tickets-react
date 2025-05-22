@@ -79,7 +79,7 @@ export default function Login(){
                     className="h-10 object-contain"
                   />
                   <span className={`${isMobile?'text-[12px] ':'text-xl font-semibold block ' }   text-gray-800 dark:text-white  `}>
-                    Soporte OMEGASYS
+                    Soporte técnico TI
                   </span>
                 </div>
         <form className="mt-8 space-y-6 flex flex-col justify-center" >

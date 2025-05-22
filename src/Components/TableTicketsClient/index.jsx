@@ -26,6 +26,22 @@ export function TableTicketsClient({ tickets, onViewTicket }) {
       default: return 'bg-gray-500'
     }
   }
+  const verificarEstado = (fecha)=>{
+    const fechaLimite = new Date(fecha);
+    const hoy = new Date();
+  
+    // Calcular la diferencia en milisegundos
+    const diferenciaMs = hoy - fechaLimite;
+  
+    // Convertir a días
+    const diferenciaDias = diferenciaMs / (1000 * 60 * 60 * 24);
+  
+    return diferenciaDias > 2 ? 'Atrasado' : 'En tiempo'
+
+
+  }
+
+
 
   return (
     <div className="rounded-md border">
@@ -39,6 +55,7 @@ export function TableTicketsClient({ tickets, onViewTicket }) {
             <TableHead>Estado</TableHead>
             <TableHead>Prioridad</TableHead>
             <TableHead>Fecha Inicio</TableHead>
+            <TableHead>Tiempo</TableHead>
             <TableHead>Acciones</TableHead>
 
           </TableRow>
@@ -61,11 +78,17 @@ export function TableTicketsClient({ tickets, onViewTicket }) {
                 </Badge>
               </TableCell>
               <TableCell>
-                <Badge className={getPriorityColor(ticket.priority)}>
-                  {ticket.priority}
-                </Badge>
+              {ticket.priority}
               </TableCell>
-              <TableCell>{new Date(ticket.createdAt).toLocaleDateString()}</TableCell>
+              <TableCell>
+             
+                {new Date(ticket.createdAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell>
+                  <Badge className={`${verificarEstado(ticket.createdAt) === 'En tiempo' ? 'bg-blue-500':'bg-red-500'}`}>
+                  {verificarEstado(ticket.createdAt)}
+                </Badge>
+                </TableCell>
               <TableCell>
                 <Button variant="outline" size="sm" onClick={() => onViewTicket(ticket)} 
                 className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>

@@ -8,13 +8,15 @@ export function SupportTicketForm({ onSubmit }) {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    priority: 'Media'
+    person:'',
+    priority: 'Media',
+
   })
 
   const handleSubmit = (e) => {
     e.preventDefault()
     if(onSubmit(formData)){
-      setFormData({ title: '', description: '', priority: 'Media' })
+      setFormData({ title: '', description: '', priority: 'Media',person:'' })
 
     }else{ return }
   }
@@ -48,6 +50,18 @@ export function SupportTicketForm({ onSubmit }) {
               placeholder="Proporciona más detalles sobre el problema"
               required
               className="min-h-[100px] appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="person" className="text-sm font-medium text-gray-700 dark:text-gray-300">Usuario a quien se atendera</label>
+            <Input
+              id="person"
+              value={formData.person}
+              onChange={(e) => setFormData({ ...formData, person: e.target.value })}
+              placeholder="Nombre del usuario"
+              required
+              className='appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 dark:text-white dark:placeholder-gray-400 dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+
             />
           </div>
 
