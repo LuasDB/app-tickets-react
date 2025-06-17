@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Toaster,toast } from "sonner"
 import ticketsService from "@/API/ticketsService"
+import {FormTicketsAdmin} from '@/Components/FormTicketsAdmin'
 import socket from '@/API/socket'
 
 
@@ -15,11 +16,14 @@ export function Tickets(){
     const [selectedTicket, setSelectedTicket] = useState(null)
     const [searchTerm, setSearchTerm] = useState('')
     const [tickets, setTickets] = useState([]) 
+    const [clients, setClients] = useState([]) 
+
     const { user } = useAuth()
     const isMobile = useMediaQuery({query:'(max-width:768px)'})
 
     useEffect(()=>{
         getDataTickets()
+        getClientsList()
     },[])
 
     useEffect(() => {
@@ -60,6 +64,7 @@ export function Tickets(){
         )
         
       } 
+      
     
       socket.on('new_message', handleNewMessage)
       socket.on('new_ticket',handleNewTicket)
@@ -72,6 +77,39 @@ export function Tickets(){
       }
     }, []);
 
+    const handleSubmit = async(ticketData)=>{
+      const user = clients?.find(item=>item._id === ticketData.user)
+      console.log('Usuario elegido',user)
+
+       const newTicket = {
+        ...ticketData,
+        status: 'open',
+        createdAt: new Date().toISOString(),
+        company:user.company,
+        firstMessage:{
+          title:ticketData.title,
+          message:ticketData.description,
+          user,
+          createdAt: new Date().toISOString()
+        }
+      }
+
+     try {
+      
+      const { data } = await ticketsService.create(newTicket)
+      if(data.success){
+
+        setTickets([...tickets,data.data])
+        toast.success('Ticket creado exitosamente')
+        return true
+      }
+      
+    } catch (error) {
+      setTickets([newTicket, ...tickets])
+      toast.error('Algo salio mal al intentar comunicar con el servidor',error)
+    }
+    }
+
 
     const getDataTickets = async()=>{
         try {
@@ -83,6 +121,19 @@ export function Tickets(){
         } catch (error) {
             toast.error(`Algo salio mal al cargar los datos,[ERROR]:${error}`)
         }
+    }
+    const getClientsList = async ()=>{
+      try {
+        const {data} = await ticketsService.getClients()
+          console.log(data)
+
+        if(data.success){
+          setClients(data.data)
+        }
+
+      } catch (error) {
+        toast.error(error.message)
+      }
     }
     const handleSendMessage = async(ticketId,newMessage)=>{
       try {
@@ -131,8 +182,10 @@ export function Tickets(){
         <div className='container mx-auto py-8 space-y-8'>
         <Toaster />
             <Tabs defaultValue="tickets">
-                <TabsList className='bg-gray-50 dark:bg-gray-800'>
-                    <TabsTrigger value='tickets'>Tickets</TabsTrigger>
+                <TabsList className='bg-gray-50 dark:bg-gray-800 gap-4'>
+                    <TabsTrigger value='newTicket'>Nuevo Ticket</TabsTrigger>
+
+                    <TabsTrigger value='tickets'>Tickets Activos</TabsTrigger>
                 </TabsList>
 
                <TabsContent value="tickets" className="space-y-4">
@@ -157,7 +210,11 @@ export function Tickets(){
                            onViewTicket={setSelectedTicket}
                            myUser={user}
                          />
-                       </TabsContent>
+                </TabsContent>
+
+                <TabsContent value="newTicket" className="flex justify-center">
+                  <FormTicketsAdmin onSubmit={handleSubmit} clients={clients}/>
+                </TabsContent>
             </Tabs>
             <ModalViewTicket
               ticket={selectedTicket}
@@ -167,7 +224,7 @@ export function Tickets(){
               className={`${isMobile ? 'pt-10' : ''}`}
               typeUser={user.role === 'admin' ? true:false}
               finishedTicket={handleFinishedTicket}
-              />
+            />
 
         </div>
     )
