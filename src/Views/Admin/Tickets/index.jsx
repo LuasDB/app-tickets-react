@@ -10,6 +10,7 @@ import { Toaster,toast } from "sonner"
 import ticketsService from "@/API/ticketsService"
 import {FormTicketsAdmin} from '@/Components/FormTicketsAdmin'
 import socket from '@/API/socket'
+import TablePagination from "@/Components/TablePagination"
 
 
 export function Tickets(){
@@ -110,7 +111,6 @@ export function Tickets(){
     }
     }
 
-
     const getDataTickets = async()=>{
         try {
             const { data } = await ticketsService.getAllTickets()
@@ -177,43 +177,49 @@ export function Tickets(){
 
     const filteredTickets = tickets.filter(ticket => 
         ticket.title.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+    )
+    
     return (
         <div className='container mx-auto py-8 space-y-8'>
         <Toaster />
             <Tabs defaultValue="tickets">
-                <TabsList className='bg-gray-50 dark:bg-gray-800 gap-4'>
-                    <TabsTrigger value='newTicket'>Nuevo Ticket</TabsTrigger>
+              <TabsList className='bg-gray-50 dark:bg-gray-800 gap-4'>
+                  <TabsTrigger value='newTicket'>Nuevo Ticket</TabsTrigger>
 
-                    <TabsTrigger value='tickets'>Tickets Activos</TabsTrigger>
-                </TabsList>
+                  <TabsTrigger value='tickets'>Tickets Activos</TabsTrigger>
+                  <TabsTrigger value='history'>Historico</TabsTrigger>
+              </TabsList>
 
-               <TabsContent value="tickets" className="space-y-4">
-                         <div className="flex items-center gap-4">
-                           <Input
-                             placeholder="Buscar tickets..."
-                             value={searchTerm}
-                             onChange={(e) => setSearchTerm(e.target.value)}
-                             className="max-w-sm"
-                           />
-                           <Button
-                             variant="outline"
-                             onClick={() => setSearchTerm('')}
-                             className='group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                           >
-                             Limpiar
-                           </Button>
-                         </div>
-               
-                         <TableTicketsAdmin 
-                           tickets={filteredTickets}
-                           onViewTicket={setSelectedTicket}
-                           myUser={user}
-                         />
-                </TabsContent>
+              <TabsContent value="tickets" className="space-y-4">
+                        <div className="flex items-center gap-4">
+                          <Input
+                            placeholder="Buscar tickets..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="max-w-sm"
+                          />
+                          <Button
+                            variant="outline"
+                            onClick={() => setSearchTerm('')}
+                            className='group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                          >
+                            Limpiar
+                          </Button>
+                        </div>
+              
+                        <TableTicketsAdmin 
+                          tickets={filteredTickets}
+                          onViewTicket={setSelectedTicket}
+                          myUser={user}
+                        />
+              </TabsContent>
 
                 <TabsContent value="newTicket" className="flex justify-center">
                   <FormTicketsAdmin onSubmit={handleSubmit} clients={clients}/>
+                </TabsContent>
+
+                <TabsContent value="history" className="flex justify-center">
+                  <TablePagination />
                 </TabsContent>
             </Tabs>
             <ModalViewTicket

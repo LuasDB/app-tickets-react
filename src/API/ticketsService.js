@@ -7,6 +7,7 @@ const ticketsService = {
     getRequests:()=> api.get('tickets/requests/getall'),
     getById: (id)=> api.get(`collections/tickets/${id}`),
     getClients:()=>api.get(`tickets/get-clients/all`),
+    getTicketsPag:(config)=>api.get(`tickets/tickets/pagination`,config),
     create: (data)=> api.post('tickets/',data),
     hoursPurchases: (data)=> api.post('tickets/service-hours-purchases',data),
     addHours:(data)=> api.post(`/tickets/add-hours`,data),
