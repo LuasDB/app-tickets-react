@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import customersService from '@/API/customersService'
 
 import { Button } from '@/components/ui/button'
+
 import Card from '@/Components/Card'
 import Table from '@/Components/Table'
 import ModalViewEditClient from '@/Components/ModalViewEditClient'
 import ModalFormClient from '@/Components/ModalFormClient'
+import { toast, Toaster } from 'sonner'
 
 export default function Customers(){
 
@@ -54,6 +56,19 @@ export default function Customers(){
         setNewClient(true)
     }
 
+    const handleDelete = async(id)=>{
+        try {
+            const { data } = await customersService.remove(id)
+            if(data.success){
+
+                toast.success(data.message)
+                setCustomers(prev=>(prev.filter(item=>item._id !==id)))
+            }
+        } catch (error) {
+            toast.error('Algo salio mal',error.message)
+        }
+    }
+
     
     const getCustomers = async()=>{
         try {
@@ -77,6 +92,7 @@ export default function Customers(){
     return (
         <>
             <Card className='flex flex-col'>
+            <Toaster />
                 <Button 
                 className='max-w-[280px] text-white bg-indigo-600 hover:bg-indigo-700'
                 onClick={handleNewClient}
@@ -86,6 +102,7 @@ export default function Customers(){
                 colums={colums}
                 onView={handleView}
                 onEdit={handleEdit}
+                onDelete={handleDelete}
                 />
                 {itemSelected && (
                     <ModalViewEditClient

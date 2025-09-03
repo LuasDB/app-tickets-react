@@ -10,14 +10,25 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "./../../components/ui/pagination"
-import { FaFolderOpen ,FaUserEdit } from "react-icons/fa";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { FaFolderOpen ,FaUserEdit,FaTrash } from "react-icons/fa";
 import { Search } from "lucide-react"
 
 // Datos de ejemplo para la tabla
 
 
 export default function Tabla({...props}) {
-  const { data,colums, onView=()=>{},onEdit=()=>{} } = props
+  const { data,colums, onView=()=>{},onEdit=()=>{},onDelete=()=>{} } = props
   const [busqueda, setBusqueda] = useState("")
   const [paginaActual, setPaginaActual] = useState(1)
   const [datosFiltrados, setDatosFiltrados] = useState([])
@@ -75,7 +86,7 @@ export default function Tabla({...props}) {
             <TableBody>
               {elementosActuales.length > 0 ? (
                 elementosActuales.map((item) => (
-                  <TableRow key={item.id}>
+                  <TableRow key={item._id}>
                     {colums.map((col)=>(
                     <TableCell key={`${col.key}-data`}>{col.render ? col.render(item) : item[col.key]}</TableCell>
                     ))}
@@ -86,6 +97,27 @@ export default function Tabla({...props}) {
                       <TableCell>
                       <FaUserEdit className='cursor-pointer' onClick={()=>onEdit(item)}/>
                       </TableCell>
+                        <TableCell>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <FaTrash className='cursor-pointer' />
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>¿Deseas eliminar el registro?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                  Esta acción no se puede deshacer. El registro será eliminado permanentemente.
+                                  </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogAction onClick={()=>onDelete(item._id)}>
+                                  Eliminar
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </TableCell>
                   </TableRow>
                 ))
               ) : (
