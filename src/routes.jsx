@@ -7,6 +7,8 @@ import {Tickets} from "@/Views/Admin/Tickets"
 import {RequestHours} from "@/Views/Admin/RequestHours"
 import { ConfigView } from "@/Views/Users/Config"
 import { MdOutlineRequestPage } from "react-icons/md"
+import FormUsers from "./Components/FormUsers"
+import Users from "@/Views/Admin/Users"
 
 const routes = [
     {
@@ -53,7 +55,16 @@ const routes = [
         type:'menu',
         user:'client'
 
-    }
+    },
+    {
+        path:'/usuarios',
+        name:'Usuarios',
+        icon:<IoPeopleSharp />,
+        component:<Users />,
+        type:'menu',
+        user:'admin'
+
+    },
 ]
 
 export { routes }
