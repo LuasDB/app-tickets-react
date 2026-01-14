@@ -1,15 +1,16 @@
 import { Input } from '@/components/ui/input'
 
-export default function CustomFormGroup({ label, type, name, options = [], value, onChange, error }) {
+export default function CustomFormGroup({ label, type, name, options = [], value, onChange, error,required=false }) {
   return (
     <div className="space-y-4">
       <div>
-        <label htmlFor={name} className="block text-sm font-medium text-blue-400 ">
+        <label htmlFor={name} className="block text-sm font-medium text-blue-400 " >
           {label}
         </label>
 
         {type === 'select' ? (
           <select
+            required={required}
             name={name}
             id={name}
             value={value}
@@ -25,6 +26,7 @@ export default function CustomFormGroup({ label, type, name, options = [], value
           </select>
         ) : (
           <Input
+            required={required}
             type={type}
             name={name}
             id={name}

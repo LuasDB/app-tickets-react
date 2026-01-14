@@ -1,5 +1,7 @@
 import { useState } from "react"
 import CustomFormGroup from '../Utilitys/CustomFormGroup';
+import { Button } from '@/components/ui/button'
+import { keyframes } from "styled-components";
 
 
 
@@ -21,17 +23,24 @@ export default function FormUsers(){
         }))
     }
 
+    const handleSubmit = async(e)=>{
+        e.preventDefault()
+        alert(
+            Object.entries(formData).map(([key,value])=>`${key}:${value}`).join("\n")
+        )
+    }
+
 
 
     return (
-        <div className="container">
-            <CustomFormGroup label={'Nombre'} name={'name'} onChange={handleChange}  error={formError.name}/>
-            <CustomFormGroup label={'Correo'} name={'email'} onChange={handleChange}  error={formError.email}/>
-            <CustomFormGroup label={'Compañia'} name={'company'} onChange={handleChange}  error={formError.company}/>
-            <CustomFormGroup label={'Tipo de usuario'} name={'role'} onChange={handleChange}  error={formError.company} type={'select'} options={[{label:'Administrador',value:'admin'},{label:'Técnico',value:'technical'}]}
-
-            />
-        </div>
+        <form onSubmit={handleSubmit} className="container flex flex-col gap-4">
+            <CustomFormGroup label={'Nombre'} name={'name'} onChange={handleChange}  error={formError.name} required={true}/>
+            <CustomFormGroup label={'Correo'} name={'email'} onChange={handleChange}  error={formError.email} required={true}/>
+            <CustomFormGroup label={'Compañia'} name={'company'} onChange={handleChange}  error={formError.company} required={true}/>
+            <CustomFormGroup label={'Tipo de usuario'} name={'role'} onChange={handleChange}  error={formError.company} type={'select'} options={[{label:'Administrador',value:'admin'},{label:'Técnico',value:'technical'}]} required={true}/>
+            <Button className="w-full md:w-[300px]" >Enviar</Button>
+            
+        </form>
         
         
     )

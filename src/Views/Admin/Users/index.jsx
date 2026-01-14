@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button'
 import { FaEdit,FaTrash } from "react-icons/fa"
 import { useEffect, useState } from "react"
 import { Toaster,toast } from "sonner"
+import FormUsers from "@/Components/FormUsers"
 
 
 export default function Users(){
@@ -35,6 +36,11 @@ export default function Users(){
         }
         usersFetch()
     },[])
+
+    const handleEdit = ()=>{
+        console.log('Edit')
+        setIsModalOpen(true)
+    }
     return (
         <div className="container w-full p-6">
             <Toaster />
@@ -55,7 +61,7 @@ export default function Users(){
                             <TableCell>{ticket.role}</TableCell>
                             <TableCell className="flex flex-row gap-6">
                                 <FaEdit className="  text-blue-400 cursor-pointer hover:text-blue-600"
-                                    onClick={()=>setIsModalOpen(true)}
+                                    onClick={handleEdit}
                                 />
                                 <FaTrash className=" text-red-400 cursor-pointer hover:text-red-600"/> 
                             </TableCell>
@@ -64,8 +70,15 @@ export default function Users(){
                     </TableBody>
                 </Table>
             </div>
-            <Dialog open={isModalOpen}>
-
+            <Dialog open={isModalOpen} onOpenChange={()=>setIsModalOpen(false)} >
+                <DialogContent className="sm:max-w-[800px] h-[90vh] flex flex-col p-6 dark:bg-gray-800 dark:text-gray-50">
+                    <DialogHeader>
+                        <DialogTitle>Alta de nuevo usuario</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription> 
+                        <FormUsers />
+                    </DialogDescription>
+                </DialogContent>
             </Dialog>
             
 

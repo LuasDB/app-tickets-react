@@ -37,6 +37,7 @@ export default function Login(){
       return
     }
     try {
+      console.log(loginForm.email,loginForm.password)
     const isLogin = await login(loginForm.email,loginForm.password)
 
     if(isLogin.success){
@@ -120,7 +121,9 @@ export default function Login(){
             <div className="flex items-center">
               <a 
               className="decoration-none dark:text-gray-50 text-purple-700"
-              href={`${import.meta.env.VITE_APP_BASE_URL}/EmailResetPasswordForm`}>Olvide mi contraseña</a>
+              onClick={()=>{
+                navigator('/EmailResetPasswordForm')
+              }}>Olvide mi contraseña</a>
               
             </div>
           </div>
