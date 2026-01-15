@@ -65,6 +65,34 @@ const routes = [
         user:'admin'
 
     },
+    //Para tecnico
+    {
+        path:'/clientes',
+        name:'Clientes',
+        icon:<IoPeopleSharp />,
+        component:<Customers />,
+        type:'menu',
+        user:'tec'
+
+    },
+    {
+        path:'/ticketsAdmin',
+        name:'Tickets',
+        icon:<RiCustomerService2Fill />,
+        component:<Tickets />,
+        type:'menu',
+        user:'tec'
+
+    },
+    {
+        path:'/requestHoursService',
+        name:'Solicitudes',
+        icon:<MdOutlineRequestPage />,
+        component:<RequestHours />,
+        type:'menu',
+        user:'tec'
+
+    },
 ]
 
 export { routes }
