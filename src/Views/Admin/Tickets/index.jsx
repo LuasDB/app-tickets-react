@@ -84,6 +84,7 @@ export function Tickets(){
 
        const newTicket = {
         ...ticketData,
+        userId:user._id,
         status: 'open',
         createdAt: new Date().toISOString(),
         company:user.company,
@@ -94,10 +95,12 @@ export function Tickets(){
           createdAt: new Date().toISOString()
         }
       }
+      console.log('[INFO A ENVIAR]',newTicket) 
+      
 
      try {
       
-      const { data } = await ticketsService.create(newTicket)
+      const { data } = await ticketsService.createByAdmin(newTicket)
       if(data.success){
 
         setTickets([...tickets,data.data])
